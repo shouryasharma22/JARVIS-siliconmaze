@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05080f">
+  <title>J.A.R.V.I.S // Operations Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="JARVIS home">
+      <span class="brand-mark" aria-hidden="true">J</span>
+      <span><span class="brand-title">J.A.R.V.I.S</span><span class="brand-subtitle">PERSONAL OPERATIONS SYSTEM</span></span>
+    </a>
+    <div class="system-readout">
+      <span class="online-state"><i class="online-dot"></i> ONLINE</span>
+      <span class="status-chip" data-status="google">GOOGLE <b>OFFLINE</b></span>
+      <span class="status-chip" data-status="telegram">TELEGRAM <b>OFFLINE</b></span>
+      <span class="status-chip" data-status="llm">LLM <b>OFFLINE</b></span>
+      <a class="link-google hidden" id="google-link" href="/auth">LINK GOOGLE</a>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="pane chat-pane" aria-label="JARVIS command console">
+      <div class="pane-heading">
+        <div><span class="eyebrow">01 / COMMAND</span><h1>Command Console</h1></div>
+        <div class="queue-readout"><i class="queue-light"></i><span id="queue-label">QUEUE CLEAR</span></div>
+      </div>
+      <div class="console-meta"><span>SECURE LOCAL LINK</span><span id="clock-readout">--:--:--</span><span>ENCRYPTION ACTIVE</span></div>
+      <div class="message-log" id="message-log" role="log" aria-live="polite" aria-relevant="additions">
+        <article class="message assistant-message">
+          <span class="message-stamp">J.A.R.V.I.S // SYSTEM</span>
+          <p>Good day. Systems are standing by. What would you like me to take care of?</p>
+        </article>
+      </div>
+      <div class="processing hidden" id="processing-indicator" aria-live="polite">
+        <span class="scanner"></span><span>JARVIS IS PROCESSING</span><span class="processing-dots">...</span>
+      </div>
+      <div class="composer-wrap">
+        <div class="queue-options" id="queue-options" aria-label="When a command is already running">
+          <span class="micro-label">ON BUSY</span>
+          <button class="mode-button selected" type="button" data-mode="queue" aria-pressed="true">QUEUE</button>
+          <button class="mode-button" type="button" data-mode="interrupt" aria-pressed="false">INTERRUPT</button>
+          <span class="queue-count" id="queue-count">0 PENDING</span>
+        </div>
+        <ol class="queue-preview hidden" id="queue-preview" aria-label="Pending commands"></ol>
+        <form class="composer" id="command-form">
+          <label class="sr-only" for="command-input">Enter a command</label>
+          <textarea id="command-input" rows="2" maxlength="1200" placeholder="Give me an instruction..." required></textarea>
+          <button class="send-button" type="submit"><span>SEND</span><span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="quick-commands" aria-label="Quick commands">
+          <span class="micro-label">QUICK DEPLOY</span>
+          <button type="button" class="quick-chip" data-command="What is on my calendar today?">TODAY'S AGENDA</button>
+          <button type="button" class="quick-chip" data-command="Remind me to review the project tomorrow at 9 AM">SET REMINDER</button>
+          <button type="button" class="quick-chip" data-command="Search Drive for project brief">SEARCH DRIVE</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="pane preview-pane" aria-label="Live preview">
+      <div class="pane-heading preview-heading">
+        <div><span class="eyebrow">02 / LIVE DATA</span><h2>Live Preview</h2></div>
+        <span class="sync-state"><i></i> SYNC READY</span>
+      </div>
+      <nav class="tab-bar" role="tablist" aria-label="Preview categories">
+        <button class="tab-button active" type="button" role="tab" aria-selected="true" data-tab="calendar">CALENDAR</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="reminders">REMINDERS <span class="tab-count" id="reminder-count">0</span></button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="drive">DRIVE</button>
+        <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="comms">COMMS</button>
+      </nav>
+      <div class="preview-content">
+        <section class="tab-panel active" id="panel-calendar" role="tabpanel" aria-label="Calendar">
+          <div class="section-toolbar"><div><span class="eyebrow">UPCOMING</span><h3>Calendar Events</h3></div><button class="icon-command" type="button" data-refresh="calendar" aria-label="Refresh calendar" title="Refresh calendar">↻</button></div>
+          <div class="data-list" id="calendar-list"><div class="empty-state">Calendar data will appear here.</div></div>
+        </section>
+        <section class="tab-panel" id="panel-reminders" role="tabpanel" aria-label="Reminders" hidden>
+          <div class="section-toolbar"><div><span class="eyebrow orange-text">LOCAL ALERTS</span><h3>Reminders</h3></div><button class="icon-command orange-command" type="button" data-refresh="reminders" aria-label="Refresh reminders" title="Refresh reminders">↻</button></div>
+          <div class="data-list" id="reminder-list"><div class="empty-state">No reminders yet.</div></div>
+        </section>
+        <section class="tab-panel" id="panel-drive" role="tabpanel" aria-label="Drive" hidden>
+          <div class="section-toolbar"><div><span class="eyebrow">FILE SYSTEM</span><h3>Google Drive</h3></div><button class="icon-command" type="button" data-refresh="drive" aria-label="Refresh Drive" title="Refresh Drive">↻</button></div>
+          <form class="drive-search" id="drive-search-form"><label class="sr-only" for="drive-search-input">Search Drive</label><input id="drive-search-input" type="search" maxlength="120" placeholder="Search name or contents"><button type="submit">SEARCH</button></form>
+          <form class="upload-form" id="upload-form">
+            <div class="upload-title"><span class="eyebrow">INGEST FILE</span><span class="micro-label">MAX 25 MB</span></div>
+            <label class="file-picker" for="upload-file"><span id="file-label">SELECT A FILE</span><input id="upload-file" type="file" required></label>
+            <label class="sr-only" for="upload-folder">Upload destination</label><select id="upload-folder"><option value="root">My Drive (default)</option></select>
+            <label class="sr-only" for="new-folder">Or create new folder</label><input id="new-folder" type="text" maxlength="120" placeholder="Or create new folder">
+            <button class="upload-button" type="submit">UPLOAD TO DRIVE <span aria-hidden="true">↑</span></button>
+            <div class="upload-progress hidden" id="upload-progress"><div class="progress-track"><span id="upload-progress-bar"></span></div><span id="upload-progress-label">0%</span></div>
+            <p class="form-feedback" id="upload-feedback" aria-live="polite"></p>
+          </form>
+          <div class="drive-list-heading"><span>NAME / TYPE</span><span>LOCATION / MODIFIED</span></div>
+          <div class="data-list drive-list" id="drive-list"><div class="empty-state">Connect Google to inspect Drive.</div></div>
+        </section>
+        <section class="tab-panel" id="panel-comms" role="tabpanel" aria-label="Communications" hidden>
+          <div class="section-toolbar"><div><span class="eyebrow red-text">TRANSMISSION LOG</span><h3>Communications</h3></div><button class="icon-command red-command" type="button" data-refresh="comms" aria-label="Refresh communications" title="Refresh communications">↻</button></div>
+          <form class="contact-form" id="contact-form">
+            <div class="contact-form-title"><span class="eyebrow">KNOWN CONTACTS</span><span class="micro-label">TELEGRAM CHAT ID</span></div>
+            <div class="contact-inputs"><label class="sr-only" for="contact-name">Contact name</label><input id="contact-name" type="text" maxlength="40" placeholder="Name" required><label class="sr-only" for="contact-chat-id">Telegram chat ID</label><input id="contact-chat-id" inputmode="numeric" placeholder="Chat ID" required><button type="submit" aria-label="Add contact">ADD</button></div>
+          </form>
+          <div class="contact-list" id="contact-list"></div>
+          <div class="history-heading"><span class="eyebrow">AUDIT TRAIL</span><span class="micro-label">LATEST ACTIONS</span></div>
+          <div class="data-list history-list" id="history-list"><div class="empty-state">No transmissions logged.</div></div>
+        </section>
+      </div>
+      <footer class="preview-footer"><span>LOCAL NODE // <b>JARVIS-01</b></span><span id="last-sync">AWAITING DATA</span></footer>
+    </section>
+  </main>
+  <aside class="alert-banner hidden" id="reminder-alert" role="status" aria-live="assertive">
+    <span class="alert-emblem">!</span><div><span class="eyebrow">REMINDER DUE</span><strong id="reminder-alert-text"></strong></div><button type="button" id="dismiss-alert" aria-label="Dismiss reminder alert">×</button>
+  </aside>
+</body>
+</html>
